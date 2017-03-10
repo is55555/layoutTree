@@ -129,7 +129,7 @@ new_sample_trees['alignment-problem'] = \
                                                 Tree("", [
                                                     Tree(""), Tree("")]),
                                                 Tree("")]),
-                                            Tree("")])])])])])]), ])])]),
+                                            Tree("")])])])])])]), ])])])
 
 
 def draw_tree(tree, canvasx = 800, canvasy = 600, marginx = 20., marginy = 10., filename="tree.png"):
