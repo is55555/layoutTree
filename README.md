@@ -10,6 +10,14 @@ See the paper by Buchheim et al. for a full explanation of the algorithm and pro
 
 (PDF of the paper provided in the repository)
 
+# Example tree layout
+
+![large tree](https://raw.githubusercontent.com/is55555/layoutTree/master/sample_output/saved_new_sample_tree_composite-five.png)
+
+This tree is generated programmatically in test.py (see "composite-five").
+
+
+
 # Requirements
 
 Packages pycairo and Future.
