@@ -34,7 +34,7 @@ class Tree(object):
 
     @staticmethod
     def recursive_print_string(tree_, s="", depth_limit=50):
-        if tree_.children:
+        if tree_.children:  # could be refactored to "not tree_.is_leaf()"
             s += "Tree('%s', [" % tree_.node_name
             for i in tree_.children:
                 s += Tree.recursive_print_string(i) + ", "

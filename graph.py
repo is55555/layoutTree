@@ -3,6 +3,9 @@ from __future__ import print_function, unicode_literals, division
 import cairo
 import math
 
+default_proportions = (1.5, 1.15)
+default_node_radius = 25
+
 
 class Canvas:
     def __init__(self, width, height):
@@ -84,14 +87,13 @@ def draw_threads(ctx, node, depth, r, prop):  # prop: proportions tuple (x, y)
         draw_threads(ctx, child, depth + 1, r, prop)
 
 
-def draw(context, algorithm, tree, node_radius=25, proportions=(1.5, 1.15), p_draw_connections=True, p_draw_threads=True):
-    t = algorithm(tree)
-
+def draw(context, tree, node_radius=default_node_radius, proportions=default_proportions,
+         p_draw_connections=True, p_draw_threads=True):
     if p_draw_connections:
-        draw_connections(context, t, 0, node_radius, proportions)
+        draw_connections(context, tree, 0, node_radius, proportions)
 
     if p_draw_threads:
-        draw_threads(context, t, 0, node_radius, proportions)
+        draw_threads(context, tree, 0, node_radius, proportions)
 
     context.fill()
-    draw_tree_nodes(context, t, 0, node_radius, proportions)
+    draw_tree_nodes(context, tree, 0, node_radius, proportions)
