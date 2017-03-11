@@ -152,7 +152,7 @@ if __name__ == "__main__":
     # this is an easy way to create tree structures, simply using your OS interface.
     os_dir = tree_from_os_dir('./structure_test/', p_width_is_name_length=False)
     print(Tree.recursive_print_string(os_dir))
-    draw_tree(os_dir, filename="osdir_test_tree.png")
+    draw_tree(os_dir, filename="./sample_output/osdir_test_tree.png")
 
     print(Tree.recursive_print_string(os_dir[1]))
     print(Tree.recursive_print_string(os_dir['c']))  # covers test case for string accessor (only looks at 1st depth)
