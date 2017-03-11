@@ -14,7 +14,15 @@ See the paper by Buchheim et al. for a full explanation of the algorithm and pro
 
 ![large tree](https://raw.githubusercontent.com/is55555/layoutTree/master/sample_output/saved_new_sample_tree_composite-five.png)
 
-This tree is generated programmatically in test.py (see "composite-five").
+This tree is generated programmatically in test.py (see "composite-five"). The dotted lines show the "threads" from the 
+Buchheim algorithm (see explanation in the paper). These dotted lines are optional in the graph.py drawing library. I
+set it to default to true originally:
+
+```python
+    draw(context, algorithm, tree, 
+        node_radius=25, proportions=(1.5, 1.15), 
+        p_draw_connections=True, p_draw_threads=True)
+```
 
 
 
