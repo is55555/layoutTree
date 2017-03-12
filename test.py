@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals, division
 from tree import Tree, tree_from_os_dir
 
 import layoutTree
-import graph
+import graph_cairo  # graph -> graph-cairo ()
 from copy import deepcopy
 
 new_sample_trees = \
@@ -148,19 +148,19 @@ def draw_tree(tree, canvasx = None, canvasy = None, marginx = 20., marginy = 10.
     boundaries = (boundaries[0] + displacement_x, boundaries[1] + displacement_x + 1, boundaries[2], boundaries[3] + 1)
 
     if not canvasx and not canvasy:
-        proportions = graph.default_proportions
+        proportions = graph_cairo.default_proportions
 
-        MAX_X = int(boundaries[1] * graph.default_node_radius * proportions[0] + (marginx*2) + 1)
-        MAX_Y = int(boundaries[3] * graph.default_node_radius * proportions[1] + (marginy*2) + 1)
+        MAX_X = int(boundaries[1] * graph_cairo.default_node_radius * proportions[0] + (marginx*2) + 1)
+        MAX_Y = int(boundaries[3] * graph_cairo.default_node_radius * proportions[1] + (marginy*2) + 1)
         # print("MAX_X, MAX_Y", MAX_X, MAX_Y)
-        c = graph.Canvas(MAX_X, MAX_Y)
+        c = graph_cairo.Canvas(MAX_X, MAX_Y)
     else:
-        c = graph.Canvas(int(canvasx), int(canvasy))
+        c = graph_cairo.Canvas(int(canvasx), int(canvasy))
 
     context = c.ctx()
     context.translate(marginx, marginy)
 
-    graph.draw(context, layout_tree, p_draw_threads=p_draw_threads)
+    graph_cairo.draw(context, layout_tree, p_draw_threads=p_draw_threads)
     c.save(filename)
 
 
