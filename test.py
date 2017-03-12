@@ -131,17 +131,36 @@ new_sample_trees['alignment-problem'] = \
                                             Tree("")])])])])])]), ])])])
 
 
-def draw_tree(tree, canvasx = 800, canvasy = 600, marginx = 20., marginy = 10., filename="tree.png"):
-    c = graph.Canvas(canvasx, canvasy)
-    context = c.ctx()
-    context.translate(marginx, marginy)
+def draw_tree(tree, canvasx = None, canvasy = None, marginx = 20., marginy = 10.,
+              filename="./tree.png", p_draw_threads=False):
     layout_tree = layoutTree.LayoutTree(tree)
     boundaries = layoutTree.buchheim(layout_tree)
-    for x in layout_tree:
-        if boundaries[0] < 0:
-            x.x += boundaries[0] * -1
-            # print("displaced", boundaries[0])
-    graph.draw(context, layout_tree, p_draw_threads=False)
+
+    if boundaries[0] < 0:  # the apportion algorithm can displace nodes leftwards into the negative
+        displacement_x = boundaries[0] * -1
+        # print("displaced", displacement_x)
+    else:
+        displacement_x = 0
+
+    if displacement_x:
+        for node in layout_tree:
+            node.x += displacement_x
+    boundaries = (boundaries[0] + displacement_x, boundaries[1] + displacement_x + 1, boundaries[2], boundaries[3] + 1)
+
+    if not canvasx and not canvasy:
+        proportions = graph.default_proportions
+
+        MAX_X = int(boundaries[1] * graph.default_node_radius * proportions[0] + (marginx*2) + 1)
+        MAX_Y = int(boundaries[3] * graph.default_node_radius * proportions[1] + (marginy*2) + 1)
+        # print("MAX_X, MAX_Y", MAX_X, MAX_Y)
+        c = graph.Canvas(MAX_X, MAX_Y)
+    else:
+        c = graph.Canvas(int(canvasx), int(canvasy))
+
+    context = c.ctx()
+    context.translate(marginx, marginy)
+
+    graph.draw(context, layout_tree, p_draw_threads=p_draw_threads)
     c.save(filename)
 
 
@@ -151,17 +170,19 @@ if __name__ == "__main__":
     # t_s = Tree.recursive_print_string(t)
     # t2 = eval(t_s)
 
+    draw_tree(new_sample_trees['alignment-problem'], marginx=0., marginy=0.,
+              filename="./sample_output/alignment-problem.png")
+    draw_tree(new_sample_trees['composite-three'], canvasx=800, canvasy=600, marginx=0., marginy=0.,
+              filename="./sample_output/composite-three.png")
+
     # this bit generates a tree with the directory structure under the folder /structure_test
     # this is an easy way to create tree structures, simply using your OS interface.
-    if False:  # disabled test
-        for _ in range(10):
-            draw_tree(new_sample_trees['alignment-problem'], marginx=0., marginy=0., filename="alignment-problem.png")
-            draw_tree(new_sample_trees['composite-three'], marginx=0., marginy=0., filename="composite-three.png")
-    #exit(0)
-
     os_dir = tree_from_os_dir('./structure_test/', p_width_is_name_length=False)
     print(Tree.recursive_print_string(os_dir))
     draw_tree(os_dir, filename="./sample_output/osdir_test_tree.png")
+
+    layout_tree = layoutTree.LayoutTree(os_dir)
+    print(layout_tree)
 
     print(Tree.recursive_print_string(os_dir[1]))
     print(Tree.recursive_print_string(os_dir['c']))  # covers test case for string accessor (only looks at 1st depth)
@@ -172,34 +193,7 @@ if __name__ == "__main__":
     algorithm = layoutTree.buchheim
 
     for i in sorted(new_sample_trees.keys()):
-        tree_i = new_sample_trees[i]
-        layout_tree = layoutTree.LayoutTree(tree_i)
-        boundaries = algorithm(layout_tree)
-
-        if boundaries[0] < 0:
-            displacement_x = boundaries[0] * -1
-            print("displaced", displacement_x)
-        else:
-            displacement_x = 0
-
-        if displacement_x:
-            for node in layout_tree:
-                node.x += displacement_x
-        boundaries = (boundaries[0] + displacement_x, boundaries[1] + displacement_x + 1, boundaries[2], boundaries[3] + 1)
-
-        proportions = graph.default_proportions
-
-        MAX_X = int(boundaries[1] * graph.default_node_radius * proportions[0]) + 20  # 20 (double the margin 10.)
-        MAX_Y = int(boundaries[3] * graph.default_node_radius * proportions[1]) + 20
-        print("MAX_X, MAX_Y", MAX_X, MAX_Y)
-        # c = graph.Canvas(1800, 800)
-        c = graph.Canvas(MAX_X, MAX_Y)
-        context = c.ctx()
-        #        context.translate(800., 10.)  # leave some margin
-        context.translate(10., 10.)  # leave some margin
-
-        graph.draw(context, layout_tree)
-
-        c.save("./sample_output/saved_new_sample_tree_%s.png" % i)
-        print(i, boundaries, layout_tree, len(tree_i), Tree.recursive_print_string(tree_i))
-
+        draw_tree(new_sample_trees[i], marginx=5, marginy=5,
+                  filename="./sample_output/saved_new_sample_tree_%s.png" % i,
+                  p_draw_threads=True)
+        print(i, len(new_sample_trees[i]), Tree.recursive_print_string(new_sample_trees[i]))

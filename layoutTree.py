@@ -85,7 +85,7 @@ class LayoutTree(object):
 
     def is_leftmost_sibling(self):
         if self.parent:
-            if self == self.parent.child[0]:
+            if self == self.parent.children[0]:
                 return True
         return False
 
@@ -116,10 +116,10 @@ def buchheim(tree):  # alters the tree in place (both first_walk(*) and second_w
 
 def first_walk(v):
     if v.is_leaf():
-        if v.leftmost_sibling:
-            v.x = v.left_brother().x + distance
-        else:
+        if v.is_leftmost_sibling():
             v.x = 0.
+        else:
+            v.x = v.left_brother().x + distance
     else:
         default_ancestor = v.children[0]
         for w in v.children:

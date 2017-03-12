@@ -16,14 +16,13 @@ See the paper by Buchheim et al. for a full explanation of the algorithm and pro
 
 This tree is generated programmatically in test.py (see "composite-five"). The dotted lines show the "threads" from the 
 Buchheim algorithm (see explanation in the paper). These dotted lines are optional in the graph.py drawing library. I
-set it to default to true originally:
+set it to default to true:
 
 ```python
     draw(context, algorithm, tree, 
-        node_radius=25, proportions=(1.5, 1.15), 
+        node_radius=default_node_radius, proportions=default_proportions, 
         p_draw_connections=True, p_draw_threads=True)
 ```
-
 
 
 # Requirements
@@ -33,12 +32,8 @@ Packages pycairo and Future.
 
 # Pending
 
-- there seems to be a small alignment/offset problem when proportion parameters are altered (test/fix)
 - Width of node mostly ignored
-- Test against cycles
 - more documentation
-- include conda environment
-
 
 # Ideas for improvement (TODO)
 
